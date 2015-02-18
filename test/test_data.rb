@@ -344,6 +344,17 @@ module Stripe
       }.merge(params)
     end
 
+    def test_account(params={})
+      id = params[:id] || "acct_test_account"
+      {
+        :id => id,
+        :object => "account",
+        :email => "test+bindings@stripe.com",
+        :charges_enabled => false,
+        :details_submitted => false
+      }
+    end
+
     def test_recipient_array
       {
         :data => [test_recipient, test_recipient, test_recipient],
