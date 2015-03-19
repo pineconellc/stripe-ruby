@@ -159,6 +159,14 @@ module Stripe
       }
     end
 
+    def test_bank_account_array(account_id)
+      {
+        :data => [test_bank_account],
+        :object => 'list',
+        :url => '/v1/accounts/' + account_id + '/bank_accounts'
+      }
+    end
+
     def test_card(params={})
       {
         :type => "Visa",
@@ -351,8 +359,20 @@ module Stripe
         :object => "account",
         :email => "test+bindings@stripe.com",
         :charges_enabled => false,
-        :details_submitted => false
-      }
+        :details_submitted => false,
+        :bank_accounts => test_bank_account_array(id)
+      }.merge(params)
+    end
+
+    def test_bank_account(params={})
+      {
+        :id => "ba_test_bank_account",
+        :last4 => "6789",
+        :bank_name => "STRIPE TEST BANK",
+        :country => "US",
+        :object => "bank_account",
+        :account => "acct_test_account"
+      }.merge(params)
     end
 
     def test_recipient_array
