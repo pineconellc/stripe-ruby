@@ -16,18 +16,18 @@ module Stripe
     end
 
     def retrieve(id, opts={})
-      response, opts = request(:get,"#{url}/#{CGI.escape(id)}", {}, opts)
-      Util.convert_to_stripe_object(response, opts)
+      response, opts = request(:get, "#{url}/#{CGI.escape(id)}", {}, opts)
+      Util.convert_to_stripe_object(response, opts, url)
     end
 
     def create(params={}, opts={})
       response, opts = request(:post, url, params, opts)
-      Util.convert_to_stripe_object(response, opts)
+      Util.convert_to_stripe_object(response, opts, url)
     end
 
     def all(params={}, opts={})
       response, opts = request(:get, url, params, opts)
-      Util.convert_to_stripe_object(response, opts)
+      Util.convert_to_stripe_object(response, opts, url)
     end
   end
 end

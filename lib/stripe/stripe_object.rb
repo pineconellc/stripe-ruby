@@ -28,8 +28,8 @@ module Stripe
       @values[:id] = id if id
     end
 
-    def self.construct_from(values, opts={})
-      self.new(values[:id]).refresh_from(values, opts)
+    def self.construct_from(values, opts={}, base_url=nil)
+      self.new(values[:id]).refresh_from(values, opts, false, base_url)
     end
 
     def to_s(*args)
@@ -41,8 +41,9 @@ module Stripe
       "#<#{self.class}:0x#{self.object_id.to_s(16)}#{id_string}> JSON: " + JSON.pretty_generate(@values)
     end
 
-    def refresh_from(values, opts, partial=false)
+    def refresh_from(values, opts, partial=false, base_url=nil)
       @opts = opts
+      @base_url = base_url
       @original_values = Marshal.load(Marshal.dump(values)) # deep copy
       removed = partial ? Set.new : Set.new(@values.keys - values.keys)
       added = Set.new(values.keys - @values.keys)
@@ -60,7 +61,7 @@ module Stripe
         @unsaved_values.delete(k)
       end
       values.each do |k, v|
-        @values[k] = Util.convert_to_stripe_object(v, @opts)
+        @values[k] = Util.convert_to_stripe_object(v, @opts, @base_url)
         @transient_values.delete(k)
         @unsaved_values.delete(k)
       end

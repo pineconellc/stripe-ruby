@@ -5,10 +5,13 @@ module Stripe
     include Stripe::APIOperations::List
 
     def url
-      if respond_to?(:account)
-        "#{Account.url}/#{CGI.escape(account)}/bank_accounts/#{CGI.escape(id)}"
-      elsif respond_to?(:recipient)
-        "#{Recipient.url}/#{CGI.escape(recipient)}/active_account"
+      if @base_url.is_a?(String) && @base_url.match(Account.url)
+        url = @base_url.dup
+        url += "/bank_accounts" unless url.match("bank_accounts")
+        url += "/#{CGI.escape(id)}" unless url.match(id)
+        url
+      else
+        super
       end
     end
     

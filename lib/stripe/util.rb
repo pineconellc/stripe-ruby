@@ -46,13 +46,13 @@ module Stripe
       }
     end
 
-    def self.convert_to_stripe_object(resp, opts)
+    def self.convert_to_stripe_object(resp, opts, base_url=nil)
       case resp
       when Array
-        resp.map { |i| convert_to_stripe_object(i, opts) }
+        resp.map { |i| convert_to_stripe_object(i, opts, base_url) }
       when Hash
         # Try converting to a known object class.  If none available, fall back to generic StripeObject
-        object_classes.fetch(resp[:object], StripeObject).construct_from(resp, opts)
+        object_classes.fetch(resp[:object], StripeObject).construct_from(resp, opts, base_url)
       else
         resp
       end

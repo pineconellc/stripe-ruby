@@ -22,7 +22,7 @@ module Stripe
 
     def refresh
       response, opts = request(:get, url, @retrieve_params)
-      refresh_from(response, opts)
+      refresh_from(response, opts, false, url)
     end
 
     def self.retrieve(id, opts=nil)
